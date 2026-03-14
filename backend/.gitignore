@@ -1,0 +1,16 @@
+# Environment variables — NEVER push this to GitHub!
+.env
+
+# Node modules — install via `npm install`
+node_modules/
+
+# Uploaded files (PDFs, images) — too large / user data
+uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Elite Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="auth-body">
+    <div class="form-container">
+        <h2>Welcome Back 👋</h2>
+        <div id="error" class="error-msg"></div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="student@elite.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-glow" style="width:100%; margin-top:1rem;">Secure Login</button>
+        </form>
+        <div style="text-align:center; margin-top:1.5rem;">
+            <a href="/register.html" style="font-weight:600;">Need an account? Sign up here</a>
+            <br><br>
+            <a href="/" style="font-size:0.9rem; color:var(--text-gray);">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('userId', data._id);
+
+                    if (data.role === 'admin') {
+                        window.location.href = '/admin-dashboard.html';
+                    } else {
+                        window.location.href = '/select-standard.html';
+                    }
+                } else {
+                    document.getElementById('error').innerText = data.message;
+                }
+            } catch (err) {
+                document.getElementById('error').innerText = 'Server error';
+            }
+        });
+    </script>
+</body>
+
+</html>

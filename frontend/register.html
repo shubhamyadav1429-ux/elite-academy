@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Elite Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="auth-body">
+
+    <div class="form-container">
+        <h2>Create Account 🚀</h2>
+        <div id="error" class="error-msg"></div>
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password (Min 6 characters)</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+            <div class="form-group" id="standardGroup">
+                <label>Select Standard</label>
+                <select id="standard" required>
+                    <option value="" disabled selected>Choosing standard...</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-glow" style="width:100%; margin-top:1rem;">Register Now</button>
+        </form>
+        <div style="text-align:center; margin-top:1.5rem;">
+            <a href="/login.html" style="font-weight:600;">Already have an account? Login</a>
+            <br><br>
+            <a href="/" style="font-size:0.9rem; color:var(--text-gray);">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadStandards() {
+            const res = await fetch('/api/public/standards');
+            const data = await res.json();
+            const select = document.getElementById('standard');
+            select.innerHTML = '<option value="" disabled selected>-- Select your Standard --</option>';
+            if (data.success && data.data) {
+                data.data.forEach(std => {
+                    const opt = document.createElement('option');
+                    opt.value = std._id;
+                    opt.innerText = std.name;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        loadStandards();
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const standard = document.getElementById('standard').value;
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, standard, role: 'student' })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('role', data.role);
+                    localStorage.setItem('userId', data._id);
+                    window.location.href = '/select-standard.html';
+                } else {
+                    document.getElementById('error').innerText = data.message;
+                }
+            } catch (err) {
+                document.getElementById('error').innerText = 'Server error';
+            }
+        });
+    </script>
+</body>
+
+</html>
