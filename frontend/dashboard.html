@@ -656,15 +656,15 @@
             try {
                 const res = await fetchWithAuth(API_URL + '/student/results');
                 if (res.success && res.data.length > 0) {
-                    let html = `<table><tr><th>Date</th><th>Chapter</th><th>Score</th></tr>`;
+                    let html = `<table><thead><tr><th>Date</th><th>Chapter</th><th>Score</th></tr></thead><tbody>`;
                     res.data.forEach(r => {
                         html += `<tr>
-              <td>${new Date(r.createdAt).toLocaleDateString()}</td>
-              <td>${r.chapter ? r.chapter.title : 'Deleted Chapter'}</td>
-              <td>${r.score} / ${r.total}</td>
+              <td data-label="Date">${new Date(r.createdAt).toLocaleDateString()}</td>
+              <td data-label="Chapter">${r.chapter ? r.chapter.title : 'Deleted Chapter'}</td>
+              <td data-label="Score">${r.score} / ${r.total}</td>
             </tr>`;
                     });
-                    html += `</table>`;
+                    html += `</tbody></table>`;
                     contentDiv.innerHTML = `<h3 style="margin-top:1rem;">My Previous Results</h3>` + html;
                 } else {
                     contentDiv.innerHTML = `<h3 style="margin-top:1rem;">My Previous Results</h3><p>No results found.</p>`;
