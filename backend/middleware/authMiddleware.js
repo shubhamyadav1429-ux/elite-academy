@@ -10,7 +10,7 @@ exports.protect = async (req, res, next) => {
     ) {
         try {
             token = req.headers.authorization.split(' ')[1];
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey_for_elite_academy_secure_2026');
 
             req.user = await User.findById(decoded.id);
             next();
