@@ -96,6 +96,39 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
+
+        /* Mobile Adjustments for Admin Page */
+        @media screen and (max-width: 768px) {
+            .admin-section {
+                padding: 1.5rem 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .admin-form-card {
+                padding: 1.2rem;
+            }
+
+            .metric-card {
+                padding: 1.5rem;
+            }
+
+            .mcq-form-row {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            .mcq-form-row > div {
+                flex: 1 1 100% !important;
+            }
+
+            .main-content h2 {
+                font-size: 1.8rem !important;
+                margin-top: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -231,7 +264,7 @@
             </div>
             <div class="admin-form-card" style="grid-column: 1 / -1;">
               <h4>Add MCQ Question</h4>
-              <form onsubmit="addMCQ(event)" style="display:flex; flex-wrap:wrap; gap:1rem;">
+              <form class="mcq-form-row" onsubmit="addMCQ(event)" style="display:flex; flex-wrap:wrap; gap:1rem;">
                 <div style="flex: 1 1 100%;"><input type="text" id="mcqQ" placeholder="Question Title" required></div>
                 <div style="flex: 1 1 45%;"><input type="text" id="mcqO1" placeholder="Option 1" required></div>
                 <div style="flex: 1 1 45%;"><input type="text" id="mcqO2" placeholder="Option 2" required></div>
